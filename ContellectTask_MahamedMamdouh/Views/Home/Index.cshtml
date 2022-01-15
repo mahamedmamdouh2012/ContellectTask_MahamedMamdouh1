@@ -1,0 +1,63 @@
+﻿@model ContellectTask_MahamedMamdouh.Models.Users
+
+@{ 
+    Layout = "";
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ContellectTask_MahamedMamdouh</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/font/bootstrap-icons.css" rel="stylesheet" />
+</head>
+<body>
+   
+
+
+    <div class="container">
+        <div class="align-items-center justify-content-center row" style="height: 79vh;">
+            <div class="col-6 box p-5">
+                <form asp-action="Login" method="post">
+                    <div class="col-12 mt-2 mb-4 text-center">
+                        <img src="~/download.png" style="width:300px"/>
+                       
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label asp-for="UserName" class="control-label"></label>
+                        <input asp-for="UserName" class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" type="password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="my-3 py-2 col-12">
+                        <button class="btn text-success box btn-block" type="submit">Login</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+        
+
+
+        @if (TempData["msg"] != null)
+        {
+            <script>alert('@TempData["msg"]');</script>
+        }
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

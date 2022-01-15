@@ -1,0 +1,284 @@
+﻿@model ContellectTask_MahamedMamdouh.Models.Contacts
+
+
+@{
+    ContellectTask_MahamedMamdouh.Models.ContactModel ContactModel = TempData["ContactModel"] as ContellectTask_MahamedMamdouh.Models.ContactModel;
+}
+
+
+@{
+    ViewData["Title"] = "Contacts";
+}
+
+
+<div class="align-items-center my-3 p-1 row  mx-1">
+    <div class="col">
+        <h4>Contacts</h4>
+    </div>
+    <div class="col text-right">
+        <button type="button" class="btn font-weight-bold box mx-1 text-success" data-toggle="modal" data-target="#exampleModal" >
+            <i class="bi bi-plus-lg"></i> Add New
+        </button>
+        <button type="button" class="btn font-weight-bold box text-primary"  >
+            <i class="bi bi-search"></i> Filter
+        </button>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Contact</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <partial name="_Create" />
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="box ">
+    <form asp-action="index" asp-controller="Contacts" method="post">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Phone
+                    </th>
+                    <th>
+                        Address
+                    </th>
+                    <th>
+                        Notes
+                    </th>
+                    <th class="text-center"><i class="bi bi-gear"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+       
+                @foreach (var item in ContactModel.LContacts)
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.Phone
+                        </td>
+                        <td>
+                            @item.Address
+                        </td>
+                        <td>
+                            @item.Notes
+                        </td>
+                        <td class="text-center">
+                            <div>
+
+                                <button type="button" class="btn mx-2 text-warning EditBtn" id="EditBtn@(item.ContactId)" onclick="LockFN(@(item.ContactId),1)"><i class="bi bi-pencil-square "></i></button>
+                                <button type="button" id="DeleteBtn@(item.ContactId)" class="btn text-danger" onclick="DeleteContact(@item.ContactId,'@item.Name');"><i class="bi bi-trash "></i></button>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr class="d-none">
+                        <td>
+                            <input type="text" class="form-control Name" value="@item.Name" />
+                        </td>
+                        <td>
+                            <input type="number" class="form-control Phone" value="@item.Phone" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control Address" value="@item.Address" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control Notes" value="@item.Notes" />
+                        </td>
+                        <td class="text-center">
+                            <div>
+
+                                <button type="button" class="btn mx-2 text-success" id="saveEditBtn@(item.ContactId)" onclick="SaveChange(@(item.ContactId))"><i class="bi bi-check-lg"></i></button>
+                                <button type="button" id="CancelLockBtn@(item.ContactId)" onclick="LockFN(@(item.ContactId),0)" class="btn text-primary"><i class="bi bi-x-lg"></i></button>
+                            </div>
+
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+        <input type="hidden" id="hfCurrentPageIndex" name="currentPageIndex" />
+
+    </form>
+
+</div>
+<div class="d-flex justify-content-center my-2">
+    @for (int i = 1; i <= ContactModel.PageCount; i++)
+    {
+
+        <div class="ml-2">
+
+            @if (i != ContactModel.CurrentPageIndex)
+            {
+                <a class="btn font-weight-bold box text-secondary" href="javascript:PagerClick(@i);">@i</a>
+            }
+            else
+            {
+                <span class="btn font-weight-bold box text-primary">@i</span>
+            }
+
+
+        </div>
+    }
+</div>
+
+
+<script src="~/js/signlar/dist/browser/signalr.js"></script>
+
+<script type="text/javascript">
+    function PagerClick(index) {
+        document.getElementById("hfCurrentPageIndex").value = index;
+        document.forms[1].submit();
+    }
+
+
+    var connection = new signalR.HubConnectionBuilder().withUrl("/EditHub").build();
+
+
+    connection.on("LockContact", function (ContactId, status) {
+        console.log('connection on');
+        if (status==1) {
+            $("#EditBtn" + ContactId).prop('disabled', true);
+            $("#DeleteBtn" + ContactId).addClass("d-none");
+            $("#EditBtn" + ContactId).closest("tr").addClass("bg-warning");
+        }
+        else {
+            $("#EditBtn" + ContactId).prop('disabled', false);
+            $("#DeleteBtn" + ContactId).removeClass("d-none");
+            $("#EditBtn" + ContactId).closest("tr").removeClass("bg-warning d-none");
+            location.reload();
+
+        }
+    });
+
+    connection.start().then(function () {
+        console.log('connection started');
+
+        $("#EditBtn").prop('disabled', false);
+
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    function LockFN(ContactId, status) {
+        console.log('connection clicked');
+
+
+        if (status == 1) {
+
+            $(".EditBtn" ).prop('disabled', true);
+
+            $("#EditBtn" + ContactId).prop('disabled', true);
+            $("#EditBtn" + ContactId).closest("tr").addClass("d-none");
+
+            $("#EditBtn" + ContactId).closest("tr").next("tr").removeClass("d-none");
+        }
+        if (status ==0) {
+
+            $("#CancelLockBtn" + ContactId).closest("tr").addClass("d-none");
+
+        }
+
+        connection.invoke("LockEdit", ContactId, status).catch(function (err) {
+            return console.error(err.toString());
+        });
+        event.preventDefault();
+    }
+
+
+    function SaveChange(ContactId)
+    {
+        var dobj = [];
+        dobj.push({
+            "ContactID": ContactId,
+            "Name": $("#saveEditBtn" + ContactId).closest("tr").find(".Name").val(),
+            "Phone": $("#saveEditBtn" + ContactId).closest("tr").find(".Phone").val(),
+            "Address": $("#saveEditBtn" + ContactId).closest("tr").find(".Address").val(),
+            "Notes": $("#saveEditBtn" + ContactId).closest("tr").find(".Notes").val(),
+        });
+
+        var jlst = JSON.stringify(dobj);
+        console.log(dobj);
+                        $.ajax({
+                            type: "post",
+                            url: '@Url.Action("Edit")',
+                            data: { ContactId: ContactId, jsonData: jlst},
+                            success: function (response) {
+
+                                if (response.success) {
+                                    LockFN(ContactId, 0);
+                                        alert('Save Done Successfuly');
+                                        location.reload();
+
+
+                                }
+                                else {
+
+                                    alert('Sorry ');
+
+
+                                }
+                            },
+                            error: function (response) {
+                                alert('Sorry ');
+
+                            },
+                            traditional: true
+                        });
+    }
+
+
+
+    function DeleteContact(ContactId,Name)
+     {
+         console.log("enter Delete")
+         var text = "do you want delete (" + Name + ")";
+         if (confirm(text) == true)
+         {
+           $.ajax({
+                            type: "post",
+                            url: '@Url.Action("Delete")',
+                            data: { ContactId: ContactId},
+                            success: function (response) {
+
+                                if (response.success) {
+                                    LockFN(ContactId, 0);
+                                    alert('Deleted Successfuly');
+                                    location.reload();
+                                }
+                                else
+                                {
+                                    alert('Sorry ');
+                                }
+                            },
+                            error: function (response) {
+                                alert('Sorry ');
+
+                            },
+                            traditional: true
+            });
+         }
+
+    }
+</script>
+@if (TempData["msg"] != null)
+{
+    <script>alert('@TempData["msg"]');</script>
+}
