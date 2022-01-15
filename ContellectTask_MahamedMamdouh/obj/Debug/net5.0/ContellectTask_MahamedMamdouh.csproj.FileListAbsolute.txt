@@ -142,7 +142,6 @@ C:\Users\0\source\repos\ContellectTask_MahamedMamdouh\ContellectTask_MahamedMamd
 C:\Users\0\source\repos\ContellectTask_MahamedMamdouh\ContellectTask_MahamedMamdouh\obj\Debug\net5.0\ref\ContellectTask_MahamedMamdouh.dll
 C:\Users\0\source\repos\ContellectTask_MahamedMamdouh\ContellectTask_MahamedMamdouh\obj\Debug\net5.0\ContellectTask_MahamedMamdouh.pdb
 C:\Users\0\source\repos\ContellectTask_MahamedMamdouh\ContellectTask_MahamedMamdouh\obj\Debug\net5.0\ContellectTask_MahamedMamdouh.genruntimeconfig.cache
-C:\Users\0\source\repos\ContellectTask_MahamedMamdouh\ContellectTask_MahamedMamdouh\obj\Debug\net5.0\ContellectTask_MahamedMamdouh.csproj.AssemblyReference.cache
 C:\Users\0\source\repos\ContellectTask_MahamedMamdouh\ContellectTask_MahamedMamdouh\bin\Debug\net5.0\libman.json
 C:\Users\0\source\repos\ContellectTask_MahamedMamdouh\ContellectTask_MahamedMamdouh\bin\Debug\net5.0\System.Web.Mvc.dll
 C:\Users\0\source\repos\ContellectTask_MahamedMamdouh\ContellectTask_MahamedMamdouh\bin\Debug\net5.0\System.Web.Razor.dll
