@@ -1,3 +1,5 @@
+//use this query to insert some data
+
 SET IDENTITY_INSERT [dbo].[Contacts] ON
 INSERT INTO [dbo].[Contacts] ([ContactId], [Name], [Phone], [Address], [Notes]) VALUES (2, N'mahamed', 1012769780, N'Giza', N'notes')
 INSERT INTO [dbo].[Contacts] ([ContactId], [Name], [Phone], [Address], [Notes]) VALUES (3, N'ahmed', 121279780, N'cario', N'notes1')
